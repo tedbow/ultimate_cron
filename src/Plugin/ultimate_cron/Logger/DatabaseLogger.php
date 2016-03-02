@@ -126,7 +126,7 @@ class DatabaseLogger extends LoggerBase implements PluginCleanupInterface {
         ->orderBy('l.start_time', 'ASC')
         ->orderBy('l.end_time', 'ASC')
         ->execute()
-        ->fetchAll(PDO::FETCH_COLUMN);
+        ->fetchCol();
       if ($lids) {
         $count += count($lids);
         $max -= count($lids);

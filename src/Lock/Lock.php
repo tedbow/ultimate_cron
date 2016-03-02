@@ -234,7 +234,7 @@ class Lock implements LockInterface {
         ->where('l.current = l.lid')
         ->range(0, 100)
         ->execute()
-        ->fetchAll(PDO::FETCH_COLUMN);
+        ->fetchCol();
 
       if ($lids) {
         $count += count($lids);
