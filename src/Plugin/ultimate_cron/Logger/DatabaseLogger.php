@@ -1,10 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: berdir
- * Date: 4/4/14
- * Time: 4:27 PM
+ * @file
+ * Contains \Drupal\ultimate_cron\Plugin\ultimate_cron\Logger\DatabaseLogger.
+ * Database logger for Ultimate Cron.
  */
+
 namespace Drupal\ultimate_cron\Plugin\ultimate_cron\Logger;
 
 use Database;
@@ -14,7 +14,6 @@ use Drupal\ultimate_cron\Entity\CronJob;
 use Drupal\ultimate_cron\Logger\DatabaseLogEntry;
 use Drupal\ultimate_cron\Logger\LoggerBase;
 use Drupal\ultimate_cron\PluginCleanupInterface;
-use PDO;
 
 /**
  * Database logger.
@@ -160,19 +159,30 @@ class DatabaseLogger extends LoggerBase implements PluginCleanupInterface {
    * Settings form.
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-    $form['method'] = array(
+    $plugin_id = $this->pluginId;
+    $defination = $this->getPluginDefinition();
+    $config = \Drupal::service('config.factory')->get('ultimate_cron.settings');
+    $form['logger_default']['#options'][$plugin_id] = $defination['title'];
+
+    $form[$plugin_id] = [
+      '#type' => 'fieldset',
+      '#title' => $defination['title'],
+      '#tree' => TRUE,
+    ];
+
+    $form[$plugin_id]['method'] = array(
       '#type' => 'select',
       '#title' => t('Log entry cleanup method'),
       '#description' => t('Select which method to use for cleaning up logs.'),
       '#options' => $this->options['method'],
-      '#default_value' => $this->configuration['method'],
+      '#default_value' => $config->get('logger.database.method'),
     );
 
-    $form['expire'] = array(
+    $form[$plugin_id]['expire'] = array(
       '#type' => 'textfield',
       '#title' => t('Log entry expiration'),
       '#description' => t('Remove log entries older than X seconds.'),
-      '#default_value' => $this->configuration['expire'],
+      '#default_value' => $config->get('logger.database.expire'),
       '#fallback' => TRUE,
       '#states' => array(
         'visible' => array(
@@ -184,11 +194,11 @@ class DatabaseLogger extends LoggerBase implements PluginCleanupInterface {
       ),
     );
 
-    $form['retain'] = array(
+    $form[$plugin_id]['retain'] = array(
       '#type' => 'textfield',
       '#title' => t('Retain logs'),
       '#description' => t('Retain X amount of log entries.'),
-      '#default_value' => $this->configuration['retain'],
+      '#default_value' => $config->get('logger.database.retain'),
       '#fallback' => TRUE,
       '#states' => array(
         'visible' => array(
@@ -199,8 +209,16 @@ class DatabaseLogger extends LoggerBase implements PluginCleanupInterface {
         ),
       ),
     );
-
     return $form;
+  }
+
+  /**
+   *
+   */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+    $config = \Drupal::service('config.factory')->getEditable('ultimate_cron.settings');
+    $config->set('logger.database', $form_state->getValue('database'))
+      ->save();
   }
 
   /**
@@ -288,12 +306,33 @@ class DatabaseLogger extends LoggerBase implements PluginCleanupInterface {
     $log_entries = array();
     while ($object = $result->fetchObject($this->logEntryClass, array(
       $name,
-      $this
+      $this,
     ))) {
       $log_entries[$object->lid] = $object;
     }
 
     return $log_entries;
+  }
+
+  /**
+   * Settings form.
+   */
+  public function settingsForm(&$form, &$form_state) {
+    $elements['bin'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Cache bin'),
+      '#description' => t('Select which cache bin to use for storing logs.'),
+      '#fallback' => TRUE,
+      '#required' => TRUE,
+    );
+    $elements['timeout'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Cache timeout'),
+      '#description' => t('Seconds before cache entry expires (0 = never, -1 = on next general cache wipe).'),
+      '#fallback' => TRUE,
+      '#required' => TRUE,
+    );
+    return $elements;
   }
 
 }

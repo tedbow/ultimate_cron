@@ -1,5 +1,6 @@
 <?php
 /**
+ * @file
  * Contains \Drupal\ultimate_cron\Form\SchedulerSettingsForm.
  */
 
@@ -31,8 +32,8 @@ class SchedulerSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $values = $this->config('ultimate_cron.settings');
-    $rules = is_array($values->get('rules')) ? implode(';', $values->get('rules')) : '';
+    $config = $this->config('ultimate_cron.settings');
+    $rules = is_array($config->get('scheduler.crontab.rules')) ? implode(';', $config->get('scheduler.crontab.rules')) : '';
 
     // Setup vertical tabs.
     $form['settings_tabs'] = array(
@@ -50,7 +51,7 @@ class SchedulerSettingsForm extends ConfigFormBase {
     $form['crontab']['catch_up'] = array(
       '#title' => t("Catch up"),
       '#type' => 'textfield',
-      '#default_value' => $values->get('catch_up'),
+      '#default_value' => $config->get('scheduler.crontab.catch_up'),
       '#description' => t("Don't run job after X seconds of rule."),
       '#fallback' => TRUE,
       '#required' => TRUE,
@@ -97,14 +98,14 @@ class SchedulerSettingsForm extends ConfigFormBase {
     $form['simple']['rule'] = array(
       '#type' => 'select',
       '#title' => t('Run cron every'),
-      '#default_value' => $values->get('rule'),
+      '#default_value' => $config->get('scheduler.simple.rule'),
       '#description' => t('Select the interval you wish cron to run on.'),
       '#options' => $options,
       '#fallback' => TRUE,
       '#required' => TRUE,
     );
 
-    parent::buildForm($form, $form_state);
+    return parent::buildForm($form, $form_state);
   }
 
   /**
@@ -113,7 +114,8 @@ class SchedulerSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('ultimate_cron.settings')
       ->set('scheduler.crontab', $form_state->getValue('crontab'))
-      ->set('scheduler.simple', explode(';', $form_state->getValue('simple')))
+      ->set('scheduler.crontab.rules', explode(';', $form_state->getValue(['crontab', 'rules'])))
+      ->set('scheduler.simple', $form_state->getValue('simple'))
       ->save();
 
     parent::submitForm($form, $form_state);

@@ -68,6 +68,9 @@ ultimate_cron.settings:
       type: mapping
       label: Logger
       mapping:
+        default:
+          type: string
+          label: Default
         cache:
           type: mapping
           label: Cache
@@ -93,7 +96,7 @@ ultimate_cron.settings:
               label: Maximum number of logs to keep
     scheduler:
       type: mapping
-      label: Schedulr
+      label: Scheduler
       mapping:
         crontab:
           type: mapping
@@ -144,7 +147,7 @@ ultimate_cron.job.*:
           type: ultimate_cron.plugin.scheduler.[%parent.id]
     launcher:
       type: mapping
-      label: 'Scheduler'
+      label: 'Launcher'
       mapping:
         id:
           type: string
@@ -153,7 +156,7 @@ ultimate_cron.job.*:
           type: ultimate_cron.plugin.launcher.[%parent.id]
     logger:
       type: mapping
-      label: 'Scheduler'
+      label: 'Logger'
       mapping:
         id:
           type: string

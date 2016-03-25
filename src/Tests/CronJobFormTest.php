@@ -69,6 +69,7 @@ class CronJobFormTest extends WebTestBase {
     $this->drupalGet('admin/config/system/cron/jobs/manage/' . $this->job_id);
     $this->assertResponse('200');
 
+    print_r($this->job_name);
     // Set new cron job configuration and save the old job name.
     $job = CronJob::load($this->job_id);
     $old_job_name = $job->label();

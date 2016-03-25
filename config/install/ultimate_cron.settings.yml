@@ -18,6 +18,7 @@ launcher:
   lock_timeout: 3600
   max_execution_time: 3600
 logger:
+  default: cache
   cache:
     bin: 'cache_ultimate_cron'
     timeout: 0
