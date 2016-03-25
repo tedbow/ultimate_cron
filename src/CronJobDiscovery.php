@@ -7,6 +7,7 @@
  */
 namespace Drupal\ultimate_cron;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\ultimate_cron\Entity\CronJob;
 
@@ -21,13 +22,19 @@ class CronJobDiscovery {
   protected $moduleHandler;
 
   /**
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * CronJobDiscovery constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    */
-  public function __construct(ModuleHandlerInterface $module_handler) {
+  public function __construct(ModuleHandlerInterface $module_handler, ConfigFactoryInterface $config_factory) {
     $this->moduleHandler = $module_handler;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -57,6 +64,14 @@ class CronJobDiscovery {
         'callback' => $info['callback'],
       );
 
+      /*
+      // Set defaults
+      $config = $this->configFactory->get('ultimate_cron_general_settings');
+      $values['scheduler'] = [
+        'id' => 'simple',
+        'rule' => '',
+      ];
+*/
       $job = CronJob::create($values);
 
       $job->save();

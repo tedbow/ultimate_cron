@@ -137,37 +137,42 @@ ultimate_cron.job.*:
       type: string
       label: 'Callback'
     scheduler:
-      type: mapping
+      type: ultimate_cron.plugin.scheduler.[id]
       label: 'Scheduler'
-      mapping:
-        id:
-          type: string
-          label: 'Scheduler ID'
-        configuration:
-          type: ultimate_cron.plugin.scheduler.[%parent.id]
     launcher:
-      type: mapping
+      type: ultimate_cron.plugin.launcher.[id]
       label: 'Launcher'
-      mapping:
-        id:
-          type: string
-          label: 'Launcher ID'
-        configuration:
-          type: ultimate_cron.plugin.launcher.[%parent.id]
     logger:
-      type: mapping
+      type: ultimate_cron.plugin.logger.[id]
       label: 'Logger'
-      mapping:
-        id:
-          type: string
-          label: 'Logger ID'
-        configuration:
-          type: ultimate_cron.plugin.logger.[%parent.id]
 
-ultimate_cron.plugin.scheduler.simple:
+ultimate_cron.plugin.scheduler:
   type: mapping
   label: 'Scheduler configuration'
   mapping:
+    id:
+      type: string
+      label: 'ID'
+    uuid:
+      type: string
+      label: 'UUID'
+    rules:
+      type: sequence
+      label: 'Scheduler rules'
+      sequence:
+        type: string
+        label: 'Scheduling rule'
+
+ultimate_cron.plugin.scheduler.simple:
+  type: ultimate_cron.plugin.scheduler
+  label: 'Scheduler configuration'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    uuid:
+      type: string
+      label: 'UUID'
     rules:
       type: sequence
       label: 'Scheduler rules'
@@ -176,21 +181,25 @@ ultimate_cron.plugin.scheduler.simple:
         label: 'Scheduling rule'
 
 ultimate_cron.plugin.scheduler.crontab:
-  type: mapping
+  type: ultimate_cron.plugin.scheduler
   label: 'Scheduler configuration'
   mapping:
-    rules:
-      type: sequence
-      label: 'Scheduler rules'
-      sequence:
-        type: string
-        label: 'Scheduling rule'
     catch_up:
       type: integer
       label: 'Timeout (s) after job run'
 
-ultimate_cron.plugin.launcher.serial:
+ultimate_cron.plugin.launcher:
   type: mapping
+  label: 'Scheduler configuration'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    uuid:
+      type: string
+      label: 'UUID'
+ultimate_cron.plugin.launcher.serial:
+  type: ultimate_cron.plugin.launcher
   label: 'Scheduler configuration'
   mapping:
     timeouts:
@@ -217,8 +226,18 @@ ultimate_cron.plugin.launcher.serial:
           type: integer
           label: 'Thread'
 
-ultimate_cron.plugin.logger.database:
+ultimate_cron.plugin.logger:
   type: mapping
+  label: 'Scheduler configuration'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    uuid:
+      type: string
+      label: 'UUID'
+ultimate_cron.plugin.logger.database:
+  type: ultimate_cron.plugin.logger
   label: 'Scheduler configuration'
   mapping:
     method:
@@ -232,7 +251,7 @@ ultimate_cron.plugin.logger.database:
       label: 'Retain X amount of logs'
 
 ultimate_cron.plugin.logger.cache:
-  type: mapping
+  type: ultimate_cron.plugin.logger
   label: 'Scheduler configuration'
   mapping:
     bin:

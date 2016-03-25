@@ -9,6 +9,7 @@ namespace Drupal\ultimate_cron\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\ultimate_cron\CronPlugin;
 use Drupal\ultimate_cron\CronRule;
 
@@ -132,6 +133,9 @@ class CronJobForm extends EntityForm {
       $form[$plugin_type]['configuration'] = $plugin->buildConfigurationForm($temp_form, $form_state);
       $form[$plugin_type]['configuration']['#prefix'] = '<div id="' . $plugin_type . '_settings' . '">';
       $form[$plugin_type]['configuration']['#suffix'] = '</div>';
+      foreach (Element::children($form[$plugin_type]['configuration']) as $key) {
+        $form[$plugin_type]['configuration']['#parents'] = [$plugin_type];
+      }
     }
 
     //$form['#attached']['js'][] = drupal_get_path('module', 'ultimate_cron') . '/js/ultimate_cron.job.js';
@@ -156,7 +160,7 @@ class CronJobForm extends EntityForm {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
-    $this->entity->getPlugin('scheduler')->validateConfigurationForm($form, $form_state);
+   // $this->entity->getPlugin('scheduler')->validateConfigurationForm($form, $form_state);
 
   }
 
