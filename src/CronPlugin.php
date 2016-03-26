@@ -450,11 +450,11 @@ abstract class CronPlugin extends PluginBase implements PluginInspectionInterfac
    */
   protected function getFormConfigurationValues(FormStateInterface $form_state) {
     $form_object = $form_state->getFormObject();
-    $values = $form_state->getValue($this->getCronPluginType());
+    $values = $form_state->getValues();
     if ($form_object instanceof PluginSettingsFormBase) {
-      $values = $values[$this->pluginId];
+      return $values[$this->pluginId];
     }
-    return $values;
+    return $values[$this->getCronPluginType()];
   }
 
   /**

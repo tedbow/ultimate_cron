@@ -11,14 +11,18 @@ queue:
     enabled: TRUE
     threads: 4
     threshold: 10
+default_plugins:
+  launcher: serial
+  scheduler: simple
+  logger: database
 launcher:
-  poorman_keepalive: FALSE
-  thread: 'any'
-  max_threads: 1
-  lock_timeout: 3600
-  max_execution_time: 3600
+  serial:
+    poorman_keepalive: FALSE
+    thread: 'any'
+    max_threads: 1
+    lock_timeout: 3600
+    max_execution_time: 3600
 logger:
-  default: cache
   cache:
     bin: 'cache_ultimate_cron'
     timeout: 0

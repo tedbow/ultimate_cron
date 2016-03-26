@@ -45,57 +45,32 @@ ultimate_cron.settings:
             threshold:
               type: integer
               label: Number of items needed for a queue
-    # @todo Make logger scheulder and laucher all point to actuall condition plugins
+    default_plugins:
+      type: mapping
+      label: Default Plugins
+      mapping:
+        launcher:
+          type: string
+          label: Launcher
+        scheduler:
+          type: string
+          label: Scheduler
+        Logger:
+          type: string
+          label: Logger
     launcher:
-      type: mapping
-      label: Launcher
-      mapping:
-        thread:
-          type: string
-          label: Which thread to use
-        max_threads:
-          type: integer
-          label: Maximum number of threads
-        lock_timeout:
-          type: integer
-          label: Time to lock job
-        max_execution_time:
-          type: integer
-          label: Maximum time for the job to run
-        poorman_keepalive:
-          type: boolean
-          label: Keepalive
+      type: sequence
+      label: Launcher Settings
+      sequence:
+        type: ultimate_cron.plugin.launcher.[id]
+        label: Launcher
     logger:
-      type: mapping
-      label: Logger
-      mapping:
-        default:
-          type: string
-          label: Default
-        cache:
-          type: mapping
-          label: Cache
-          mapping:
-            bin:
-              type: string
-              label: The cache bin to use
-            timeout:
-              type: integer
-              label: Time until cache expires
-        database:
-          type: mapping
-          label: Database
-          mapping:
-            method:
-              type: integer
-              label: The method used for log retention
-            expire:
-              type: integer
-              label: Time until expiration
-            retain:
-              type: integer
-              label: Maximum number of logs to keep
-    schedulers:
+      type: sequence
+      label: Launcher Settings
+      sequence:
+        type: ultimate_cron.plugin.logger.[id]
+        label: Launcher
+    scheduler:
       type: sequence
       label: Schedulers Settings
       sequence:

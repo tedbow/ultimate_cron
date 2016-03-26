@@ -33,7 +33,7 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
    *
    * @var string
    */
-  const PLUGIN_TYPE = '';
+  const CRON_PLUGIN_TYPE = '';
 
   /**
    * @var \Drupal\Component\Plugin\PluginManagerInterface
@@ -51,7 +51,7 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('plugin.manager.ultimate_cron.' . static::PLUGIN_TYPE)
+      $container->get('plugin.manager.ultimate_cron.' . static::CRON_PLUGIN_TYPE)
     );
   }
 
@@ -66,7 +66,7 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
     /** @var \Drupal\ultimate_cron\CronPlugin[] $plugins */
     $plugins = [];
     $config = $this->config('ultimate_cron.settings');
-    $plugins_settings = $config->get(static::PLUGIN_TYPE);
+    $plugins_settings = $config->get(static::CRON_PLUGIN_TYPE)? : [];
     foreach ($definitions as  $id => $definition) {
       $plugins[$id] = $this->pluginManager->createInstance($id, $plugins_settings[$id]);
     }
@@ -77,16 +77,15 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-
+    $config = $this->config('ultimate_cron.settings');
     $plugins = $this->getPlugins();
     $form['settings_tabs'] = array(
       '#type' => 'vertical_tabs',
     );
 
     foreach ($plugins as $id => $plugin) {
-      // @todo Add vertical tab for each plugin
       $definition = $plugin->getPluginDefinition();
-      // Settings for crontab.
+      $default_options[$id] = $definition['title'];
       $form[$id] = [
         '#type' => 'details',
         '#title' => $definition['title'],
@@ -99,13 +98,23 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
         '#value' => $id,
       ];
     }
+    $form['default_plugin'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Default Plugin'),
+      '#options' => $default_options,
+      '#default_value' => $config->get('default_plugins.' . static::CRON_PLUGIN_TYPE),
+      '#weight' => -100,
+    ];
     return parent::buildForm($form, $form_state);
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $form_state->cleanValues();
     $config = $this->config('ultimate_cron.settings');
-    $config->set(static::PLUGIN_TYPE,$form_state->getValues());
+    $values = $form_state->getValues();
+    $config->set('default_plugins.' . static::CRON_PLUGIN_TYPE, $values['default_plugin']);
+    unset($values['default_plugin']);
+    $config->set(static::CRON_PLUGIN_TYPE,$values);
     $config->save();
     parent::submitForm($form, $form_state);
   }
