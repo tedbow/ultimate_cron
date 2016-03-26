@@ -55,7 +55,7 @@ ultimate_cron.settings:
         scheduler:
           type: string
           label: Scheduler
-        Logger:
+        logger:
           type: string
           label: Logger
     launcher:

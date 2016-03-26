@@ -18,11 +18,13 @@ default_plugins:
 launcher:
   serial:
     id: 'serial'
-    poorman_keepalive: FALSE
-    thread: 'any'
-    max_threads: 1
-    lock_timeout: 3600
-    max_execution_time: 3600
+    timeouts:
+      lock_timeout: 3600
+      max_execution_time: 3600
+    launcher:
+      thread: 1
+      max_threads: 1
+      poorman_keepalive: FALSE
 logger:
   cache:
     id: 'cache'
@@ -30,7 +32,7 @@ logger:
     timeout: 0
   database:
     id: 'database'
-    method: 3
+    method: '3'
     expire: 1209600
     retain: 1000
 scheduler:
@@ -41,4 +43,5 @@ scheduler:
       - '*/10+@ * * * *'
   simple:
     id: 'simple'
-    rule: '*/15+@ * * * *'
+    rules:
+      - '*/15+@ * * * *'
