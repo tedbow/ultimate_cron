@@ -11,6 +11,9 @@ namespace Drupal\ultimate_cron\Form;
  */
 class LoggerSettingsForm extends PluginSettingsFormBase {
 
+  /**
+   * {@inheritdoc}
+   */
   const CRON_PLUGIN_TYPE = 'logger';
   /**
    * {@inheritdoc}

@@ -10,6 +10,9 @@ namespace Drupal\ultimate_cron\Form;
  */
 class LauncherSettingsForm extends PluginSettingsFormBase {
 
+  /**
+   * {@inheritdoc}
+   */
   const CRON_PLUGIN_TYPE = 'launcher';
   /**
    * {@inheritdoc}

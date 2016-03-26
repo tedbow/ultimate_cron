@@ -16,14 +16,7 @@ use Drupal\ultimate_cron\CronPlugin;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Base form for all plugin general settings form
- *
- * @todo Change logger scheduler and launcher forms to extend this
- *
- * @todo Do we actually need separate form classes???
- *  or can we just have different routes with {plugin_type}
- *
- *
+ * Base form for all plugin general settings forms.
  */
 abstract class PluginSettingsFormBase extends ConfigFormBase{
 
@@ -40,6 +33,12 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
    */
   protected $pluginManager;
 
+  /**
+   * PluginSettingsFormBase constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
+   */
   public function __construct(ConfigFactoryInterface $config_factory, PluginManagerInterface $plugin_manager) {
     parent::__construct($config_factory);
     $this->pluginManager = $plugin_manager;
@@ -108,6 +107,9 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
     return parent::buildForm($form, $form_state);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $form_state->cleanValues();
     $config = $this->config('ultimate_cron.settings');
@@ -122,8 +124,6 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
 
   /**
    * {@inheritdoc}
-   *
-   * @todo will this be the same for all plugin types forms?
    */
   protected function getEditableConfigNames() {
     return ['ultimate_cron.settings'];
@@ -139,6 +139,5 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
       $plugin->validateConfigurationForm($form, $form_state);
     }
   }
-
 
 }

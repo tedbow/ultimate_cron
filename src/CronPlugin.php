@@ -88,7 +88,7 @@ abstract class CronPlugin extends PluginBase implements PluginInspectionInterfac
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-    return array();
+    return [];
   }
 
   /**

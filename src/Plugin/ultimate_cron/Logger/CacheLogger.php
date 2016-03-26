@@ -103,13 +103,4 @@ class CacheLogger extends LoggerBase {
     return $form;
   }
 
-  /**
-   *
-   */
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $config = \Drupal::service('config.factory')->getEditable('ultimate_cron.settings');
-    $config->set('logger.cache', $form_state->getValue('cache'))
-      ->save();
-  }
-
 }

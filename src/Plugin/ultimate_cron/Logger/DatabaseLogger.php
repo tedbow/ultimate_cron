@@ -213,15 +213,6 @@ class DatabaseLogger extends LoggerBase implements PluginCleanupInterface {
   }
 
   /**
-   *
-   */
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $config = \Drupal::service('config.factory')->getEditable('ultimate_cron.settings');
-    $config->set('logger.database', $form_state->getValue('database'))
-      ->save();
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function load($name, $lock_id = NULL, array $log_types = [ULTIMATE_CRON_LOG_TYPE_NORMAL]) {
