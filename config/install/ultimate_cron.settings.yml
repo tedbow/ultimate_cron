@@ -17,6 +17,7 @@ default_plugins:
   logger: database
 launcher:
   serial:
+    id: 'serial'
     poorman_keepalive: FALSE
     thread: 'any'
     max_threads: 1
@@ -24,16 +25,20 @@ launcher:
     max_execution_time: 3600
 logger:
   cache:
+    id: 'cache'
     bin: 'cache_ultimate_cron'
     timeout: 0
   database:
+    id: 'database'
     method: 3
     expire: 1209600
     retain: 1000
 scheduler:
   crontab:
+    id: 'crontab'
     catch_up: 86400
     rules:
       - '*/10+@ * * * *'
   simple:
+    id: 'simple'
     rule: '*/15+@ * * * *'
