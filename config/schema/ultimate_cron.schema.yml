@@ -45,6 +45,7 @@ ultimate_cron.settings:
             threshold:
               type: integer
               label: Number of items needed for a queue
+    # @todo Make logger scheulder and laucher all point to actuall condition plugins
     launcher:
       type: mapping
       label: Launcher
