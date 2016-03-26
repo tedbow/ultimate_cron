@@ -67,7 +67,8 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
     $config = $this->config('ultimate_cron.settings');
     $plugins_settings = $config->get(static::CRON_PLUGIN_TYPE)? : [];
     foreach ($definitions as  $id => $definition) {
-      $plugins[$id] = $this->pluginManager->createInstance($id, $plugins_settings[$id]);
+      $config = isset($plugins_settings[$id])? $plugins_settings[$id]: [];
+      $plugins[$id] = $this->pluginManager->createInstance($id, $config);
     }
     return $plugins;
   }
@@ -82,17 +83,22 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
       '#type' => 'vertical_tabs',
     );
 
+    $default_options = [];
+    $form['plugins'] = [
+      '#tree' => TRUE,
+    ];
     foreach ($plugins as $id => $plugin) {
       $definition = $plugin->getPluginDefinition();
       $default_options[$id] = $definition['title'];
-      $form[$id] = [
+
+      $form['plugins'][$id] = [
         '#type' => 'details',
         '#title' => $definition['title'],
         '#group' => 'settings_tabs',
         '#tree' => TRUE,
       ];
-      $form[$id] += $plugin->buildConfigurationForm([], $form_state);
-      $form[$id]['id'] = [
+      $form['plugins'][$id] += $plugin->buildConfigurationForm([], $form_state);
+      $form['plugins'][$id]['id'] = [
         '#type' => 'value',
         '#value' => $id,
       ];
@@ -114,9 +120,9 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
     $form_state->cleanValues();
     $config = $this->config('ultimate_cron.settings');
     $values = $form_state->getValues();
+    // Set the default plugin for this type.
     $config->set('default_plugins.' . static::CRON_PLUGIN_TYPE, $values['default_plugin']);
-    unset($values['default_plugin']);
-    $config->set(static::CRON_PLUGIN_TYPE,$values);
+    $config->set(static::CRON_PLUGIN_TYPE,$values['plugins']);
     $config->save();
     parent::submitForm($form, $form_state);
   }
@@ -135,6 +141,7 @@ abstract class PluginSettingsFormBase extends ConfigFormBase{
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
     $plugins = $this->getPlugins();
+    // Validate each plugin form.
     foreach ($plugins as $plugin) {
       $plugin->validateConfigurationForm($form, $form_state);
     }
