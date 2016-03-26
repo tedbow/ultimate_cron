@@ -1,0 +1,16 @@
+ultimate_cron.plugin.scheduler.simpler:
+  type: ultimate_cron.plugin.scheduler
+  label: 'Scheduler configuration'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    uuid:
+      type: string
+      label: 'UUID'
+    rules:
+      type: sequence
+      label: 'Scheduler rules'
+      sequence:
+        type: string
+        label: 'Scheduling rule'

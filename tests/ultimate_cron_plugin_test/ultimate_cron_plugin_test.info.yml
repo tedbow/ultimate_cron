@@ -1,0 +1,7 @@
+name: Ultimate Cron Plugin Test
+type: module
+description: Ultimate Cron Test module provides a new plugin
+core: 8.x
+package: Test
+dependencies:
+  - ultimate_cron
