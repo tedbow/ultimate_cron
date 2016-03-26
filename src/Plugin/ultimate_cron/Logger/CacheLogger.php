@@ -76,13 +76,13 @@ class CacheLogger extends LoggerBase {
     $defination = $this->getPluginDefinition();
     $form['logger_default']['#options'][$plugin_id] = $defination['title'];
 
-    $form[$plugin_id] = [
+    $form = [
       '#type' => 'fieldset',
       '#title' => $defination['title'],
       '#tree' => TRUE,
     ];
 
-    $form[$plugin_id]['bin'] = [
+    $form['bin'] = [
       '#type' => 'textfield',
       '#title' => t('Cache bin'),
       '#description' => t('Select which cache bin to use for storing logs.'),
@@ -91,7 +91,7 @@ class CacheLogger extends LoggerBase {
       '#required' => TRUE,
     ];
 
-    $form[$plugin_id]['timeout'] = [
+    $form['timeout'] = [
       '#type' => 'textfield',
       '#title' => t('Cache timeout'),
       '#description' => t('Seconds before cache entry expires (0 = never, -1 = on next general cache wipe).'),

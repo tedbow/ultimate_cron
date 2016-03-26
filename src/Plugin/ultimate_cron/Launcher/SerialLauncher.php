@@ -354,19 +354,19 @@ class SerialLauncher extends LauncherBase implements PluginCleanupInterface {
     $lock_name = 'ultimate_cron_serial_launcher_' . $thread;
     foreach ($jobs as $job) {
       $configuration = $job->getConfiguration('launcher');
-      $configuration['launcher'] += array(
+      $configuration += array(
         'thread' => 'any',
       );
-      switch ($configuration['launcher']['thread']) {
+      switch ($configuration['thread']) {
         case 'any':
-          $configuration['launcher']['thread'] = $thread;
+          $configuration['thread'] = $thread;
           break;
 
         case 'fixed':
-          $configuration['launcher']['thread'] = ($job->getUniqueID() % $configuration['launcher']['max_threads']) + 1;
+          $configuration['thread'] = ($job->getUniqueID() % $configuration['max_threads']) + 1;
           break;
       }
-      if ((!self::getGlobalOption('thread') || $configuration['launcher']['thread'] == $thread) && $job->isScheduled()) {
+      if ((!self::getGlobalOption('thread') || $configuration['thread'] == $thread) && $job->isScheduled()) {
         $job->launch();
         // Be friendly, and check if someone else has taken the lock.
         // If they have, bail out, since someone else is now handling

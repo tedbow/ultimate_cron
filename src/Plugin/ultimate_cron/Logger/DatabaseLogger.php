@@ -164,13 +164,13 @@ class DatabaseLogger extends LoggerBase implements PluginCleanupInterface {
     $config = \Drupal::service('config.factory')->get('ultimate_cron.settings');
     $form['logger_default']['#options'][$plugin_id] = $defination['title'];
 
-    $form[$plugin_id] = [
+    $form = [
       '#type' => 'fieldset',
       '#title' => $defination['title'],
       '#tree' => TRUE,
     ];
 
-    $form[$plugin_id]['method'] = array(
+    $form['method'] = array(
       '#type' => 'select',
       '#title' => t('Log entry cleanup method'),
       '#description' => t('Select which method to use for cleaning up logs.'),
@@ -178,7 +178,7 @@ class DatabaseLogger extends LoggerBase implements PluginCleanupInterface {
       '#default_value' => $config->get('logger.database.method'),
     );
 
-    $form[$plugin_id]['expire'] = array(
+    $form['expire'] = array(
       '#type' => 'textfield',
       '#title' => t('Log entry expiration'),
       '#description' => t('Remove log entries older than X seconds.'),
@@ -194,7 +194,7 @@ class DatabaseLogger extends LoggerBase implements PluginCleanupInterface {
       ),
     );
 
-    $form[$plugin_id]['retain'] = array(
+    $form['retain'] = array(
       '#type' => 'textfield',
       '#title' => t('Retain logs'),
       '#description' => t('Retain X amount of log entries.'),

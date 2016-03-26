@@ -106,7 +106,7 @@ class Crontab extends SchedulerBase {
    */
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::validateConfigurationForm($form, $form_state);
-    $rule = $form_state->getValues()['scheduler']['configuration']['rules'][0];
+    $rule = $form_state->getValues()['scheduler']['rules'][0];
     $cron = CronRule::factory($rule);
     if (!$cron->isValid()) {
       $form_state->setErrorByName('scheduler][configuration][rules][0', t('Rule is invalid'));

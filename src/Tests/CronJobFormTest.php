@@ -100,7 +100,7 @@ class CronJobFormTest extends WebTestBase {
 
     // Change time when cron runs, check the 'Scheduled' label is updated.
     $this->clickLink(t('Edit'));
-    $this->drupalPostForm(NULL, ['scheduler[configuration][rules][0]' => '0+@ */6 * * *'], t('Save'));
+    $this->drupalPostForm(NULL, ['scheduler[rules][0]' => '0+@ */6 * * *'], t('Save'));
     $this->assertText('Every 6 hours');
 
     // Test disabling a job.
@@ -151,12 +151,12 @@ class CronJobFormTest extends WebTestBase {
       'scheduler[id]' => 'crontab',
     );
     $this->drupalPostForm(NULL, $job_configuration, t('Save'));
-    $this->drupalPostForm('admin/config/system/cron/jobs/manage/' . $this->job_id, ['scheduler[configuration][rules][0]' => '0+@ * * * *'], t('Save'));
+    $this->drupalPostForm('admin/config/system/cron/jobs/manage/' . $this->job_id, ['scheduler[rules][0]' => '0+@ * * * *'], t('Save'));
     $this->assertText('0+@ * * * *');
 
     // Try editing the rule to an invalid one.
     $this->clickLink('Edit');
-    $this->drupalPostForm(NULL, ['scheduler[configuration][rules][0]' => '*//15+@ *-2 * * *'], t('Save'));
+    $this->drupalPostForm(NULL, ['scheduler[rules][0]' => '*//15+@ *-2 * * *'], t('Save'));
     $this->assertText('Rule is invalid');
     $this->assertTitle('Edit job | Drupal');
 

@@ -139,7 +139,7 @@ class CronJob extends ConfigEntityBase implements CronJobInterface {
    *   The configuration array.
    */
   public function setConfiguration($plugin_type, array $configuration) {
-    $this->{$plugin_type}['configuration'] = $configuration;
+    $this->{$plugin_type} = $configuration;
   }
 
   /**
@@ -259,16 +259,16 @@ class CronJob extends ConfigEntityBase implements CronJobInterface {
     }
     /* @var \Drupal\Core\Plugin\DefaultPluginManager $manager */
     $manager = \Drupal::service('plugin.manager.ultimate_cron.' . $plugin_type);
-    $this->plugins[$plugin_type] = $manager->createInstance($name, isset($this->{$plugin_type}['configuration']) ? $this->{$plugin_type}['configuration'] : array());
+    $this->plugins[$plugin_type] = $manager->createInstance($name, isset($this->{$plugin_type}) ? $this->{$plugin_type} : array());
     return $this->plugins[$plugin_type];
   }
 
   public function getConfiguration($plugin_type) {
-    if(!isset($this->{$plugin_type}['configuration'])) {
-      $this->{$plugin_type}['configuration'] = $this->getPlugin($plugin_type)->defaultConfiguration();
+    if(!isset($this->{$plugin_type})) {
+      $this->{$plugin_type} = $this->getPlugin($plugin_type)->defaultConfiguration();
     }
 
-    return $this->{$plugin_type}['configuration'];
+    return $this->{$plugin_type};
   }
 
   /**

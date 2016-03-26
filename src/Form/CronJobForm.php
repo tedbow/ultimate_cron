@@ -133,6 +133,8 @@ class CronJobForm extends EntityForm {
       $form[$plugin_type]['configuration'] = $plugin->buildConfigurationForm($temp_form, $form_state);
       $form[$plugin_type]['configuration']['#prefix'] = '<div id="' . $plugin_type . '_settings' . '">';
       $form[$plugin_type]['configuration']['#suffix'] = '</div>';
+      // Set parents to under 'configuration' to be the $plugin_type
+      // 'configuration' is not in the schema
       foreach (Element::children($form[$plugin_type]['configuration']) as $key) {
         $form[$plugin_type]['configuration']['#parents'] = [$plugin_type];
       }
@@ -160,8 +162,7 @@ class CronJobForm extends EntityForm {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
-   // $this->entity->getPlugin('scheduler')->validateConfigurationForm($form, $form_state);
-
+    $this->entity->getPlugin('scheduler')->validateConfigurationForm($form, $form_state);
   }
 
   /**
