@@ -9,15 +9,15 @@ namespace Drupal\ultimate_cron\Scheduler;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\payment\Plugin\Payment\OperationsProviderPluginManagerTrait;
+use Drupal\ultimate_cron\PluginManagerBase;
 
 /**
  * A plugin manager for scheduler plugins.
  *
  *  @see \Drupal\ultimate_cron\Scheduler\SchedulerInterface
  */
-class SchedulerManager extends DefaultPluginManager {
+class SchedulerManager extends PluginManagerBase {
 
   /**
    * Constructs a SchedulerManager object.
@@ -35,5 +35,13 @@ class SchedulerManager extends DefaultPluginManager {
     $this->alterInfo('ultimate_cron_scheduler_info');
     $this->setCacheBackend($cache_backend, 'ultimate_cron_scheduler');
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function pluginType() {
+    return 'scheduler';
+  }
+
 
 }

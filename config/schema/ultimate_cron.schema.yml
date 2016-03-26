@@ -95,30 +95,12 @@ ultimate_cron.settings:
             retain:
               type: integer
               label: Maximum number of logs to keep
-    scheduler:
-      type: mapping
-      label: Scheduler
-      mapping:
-        crontab:
-          type: mapping
-          label: Crontab
-          mapping:
-            catch_up:
-              type: integer
-              label: Stop between job runs
-            rules:
-              type: sequence
-              label: Array with rules
-              sequence:
-                type: string
-                label: Formatted rule
-        simple:
-          type: mapping
-          label: Simple
-          mapping:
-            rule:
-              type: string
-              label: Rule for Simple scheduler
+    schedulers:
+      type: sequence
+      label: Schedulers Settings
+      sequence:
+        type: ultimate_cron.plugin.scheduler.[id]
+        label: Scheduler
 
 # @todo make schema pluggable
 ultimate_cron.job.*:

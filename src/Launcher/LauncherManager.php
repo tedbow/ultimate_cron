@@ -9,12 +9,12 @@ namespace Drupal\ultimate_cron\Launcher;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Plugin\DefaultPluginManager;
+use Drupal\ultimate_cron\PluginManagerBase;
 
 /**
  * A plugin manager for launcher plugins.
  */
-class LauncherManager extends DefaultPluginManager {
+class LauncherManager extends PluginManagerBase {
 
   /**
    * Constructs a LauncherManager object.
@@ -31,6 +31,13 @@ class LauncherManager extends DefaultPluginManager {
     parent::__construct('Plugin/ultimate_cron/Launcher', $namespaces, $module_handler, '\Drupal\ultimate_cron\Launcher\LauncherInterface', 'Drupal\ultimate_cron\Annotation\LauncherPlugin');
     $this->alterInfo('ultimate_cron_launcher_info');
     $this->setCacheBackend($cache_backend, 'ultimate_cron_launcher');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function pluginType() {
+    return 'launcher';
   }
 
 }

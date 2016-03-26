@@ -10,12 +10,12 @@ namespace Drupal\ultimate_cron\Logger;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManager;
-use Drupal\Core\Plugin\DefaultPluginManager;
+use Drupal\ultimate_cron\PluginManagerBase;
 
 /**
  * A plugin manager for logger plugins.
  */
-class LoggerManager extends DefaultPluginManager {
+class LoggerManager extends PluginManagerBase {
 
   /**
    * Constructs a LoggerManager object.
@@ -32,6 +32,13 @@ class LoggerManager extends DefaultPluginManager {
     parent::__construct('Plugin/ultimate_cron/Logger', $namespaces, $module_handler, '\Drupal\ultimate_cron\Logger\LoggerInterface', 'Drupal\ultimate_cron\Annotation\LoggerPlugin');
     $this->alterInfo('ultimate_cron_logger_info');
     $this->setCacheBackend($cache_backend, 'ultimate_cron_logger');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function pluginType() {
+    return 'logger';
   }
 
 }

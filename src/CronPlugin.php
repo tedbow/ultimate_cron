@@ -10,6 +10,7 @@ use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\ultimate_cron\Form\PluginSettingsFormBase;
 
 /**
  * This is the base class for all Ultimate Cron plugins.
@@ -17,7 +18,7 @@ use Drupal\Core\Plugin\PluginFormInterface;
  * This class handles all the load/save settings for a plugin as well as the
  * forms, etc.
  */
-class CronPlugin extends PluginBase implements PluginInspectionInterface, ConfigurablePluginInterface, PluginFormInterface {
+abstract class CronPlugin extends PluginBase implements PluginInspectionInterface, ConfigurablePluginInterface, PluginFormInterface {
   static public $multiple = FALSE;
   static public $instances = array();
   public $weight = 0;
@@ -33,7 +34,7 @@ class CronPlugin extends PluginBase implements PluginInspectionInterface, Config
 
   /**
    * Returns a list of plugin types.
-   * 
+   *
    * @return array
    */
   public static function getPluginTypes() {
@@ -439,5 +440,31 @@ class CronPlugin extends PluginBase implements PluginInspectionInterface, Config
       }
     }
   }
+
+  /**
+   * Gets the values for configuration form from the Form State.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *
+   * @return array
+   */
+  protected function getFormConfigurationValues(FormStateInterface $form_state) {
+    $form_object = $form_state->getFormObject();
+    $values = $form_state->getValue($this->getCronPluginType());
+    if ($form_object instanceof PluginSettingsFormBase) {
+      $values = $values[$this->pluginId];
+    }
+    return $values;
+  }
+
+  /**
+   * Gets the cron plugin type for this plugin.
+   *
+   * @return string
+   */
+  protected function getCronPluginType() {
+    return $this->getPluginDefinition()['cron_plugin_type'];
+  }
+
 
 }

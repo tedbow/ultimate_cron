@@ -12,7 +12,9 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Form for scheduler settings.
  */
-class SchedulerSettingsForm extends ConfigFormBase {
+class SchedulerSettingsForm extends PluginSettingsFormBase {
+
+  const PLUGIN_TYPE = 'scheduler';
 
   /**
    * {@inheritdoc}
@@ -24,15 +26,9 @@ class SchedulerSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  protected function getEditableConfigNames() {
-    return ['ultimate_cron.settings'];
-  }
+  public function buildFormx(array $form, FormStateInterface $form_state) {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('ultimate_cron.settings');
+    return $form;
     $rules = is_array($config->get('scheduler.crontab.rules')) ? implode(';', $config->get('scheduler.crontab.rules')) : '';
 
     // Setup vertical tabs.
@@ -111,7 +107,7 @@ class SchedulerSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitFormx(array &$form, FormStateInterface $form_state) {
     $this->config('ultimate_cron.settings')
       ->set('scheduler.crontab', $form_state->getValue('crontab'))
       ->set('scheduler.crontab.rules', explode(';', $form_state->getValue(['crontab', 'rules'])))
